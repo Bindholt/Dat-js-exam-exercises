@@ -1,23 +1,27 @@
-"use strict";
+import { teachers } from "./teachers.js";
 
 window.addEventListener("load", init);
 
-async function init() {
-    let teachers = [];
-    teachers = await importTeachers();
+function init() {
     console.log(teachers);
+    displayTeachers();
 }
 
-async function importTeachers() {
-    const response = await fetch("teachers.js");
-    const teachersData = await response.json();
-    const teachersArray = [];
-
-    for (const teacher in teachersData) {
-        const data = teachers[teacher];
-		data["id"] = teacher;
-		teachersArray.push(data);
+function displayTeachers() {
+    for (const teacher in teachers) {
+        displayTeacher(teachers[teacher]);
     }
-    
-    return teachersArray;
 }
+
+function displayTeacher(teacher) {
+    const teacherHTML = /* html */ `
+        <li><p>${teacher.name}</p><p>Email: ${teacher.email}</p></li>
+    `;
+    document.querySelector("#teachers-list").insertAdjacentHTML("beforeend", teacherHTML);
+}
+
+function sortArray(sortBy) {
+    return teachers.sort((a,b) => a[sortBy].localeCompare(b[sortBy]));
+}
+
+window.sortArray = sortArray;
